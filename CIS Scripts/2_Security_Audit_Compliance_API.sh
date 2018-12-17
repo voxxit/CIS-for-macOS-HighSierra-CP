@@ -39,6 +39,21 @@
 # Non-compliant items are logged to /Library/Application Support/SecurityScoring/org_audit
 # Variables
 
+# EXEMPTIONS
+# Add a variation of the below snippet to check for any exemptions created for the machine
+# 2.1.1 Turn off Bluetooth, if no paired devices exist
+# Check Exemption Status
+# Exemption2_1_1="$(defaults read "$exemptionlocation" Exemption2_1_1)"
+# If exemption is set to true, exit any additional checks on this compliance item
+# if [ "$Exemption2_1_1" = "true" ]; then
+#    echo "Computer is exempt from this CIS Compliance Attribute, skipping"
+#    exit 0
+# else
+# Regular Compliance Code Below
+# ...
+# fi
+
+
 JamfProURL=""  # URL for your Jamf Pro server, including port, if necessary
 
 # Using the GenerateEncryptedSring function, replace ENTER_SALT_HERE and ENTER_PASS_PHRASE_HERE
@@ -60,6 +75,7 @@ CISListEA=""   #ID number for the extension attribute 2.5_Audit_List
 
 plistlocation="/Library/Application Support/SecurityScoring/org_security_score.plist"
 auditfilelocation="/Library/Application Support/SecurityScoring/org_audit"
+exemptionlocation="/Library/Application Support/SecurityScoring/org_exemptions.plist"
 currentUser="$(python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')"
 hardwareUUID="$(/usr/sbin/system_profiler SPHardwareDataType | grep "Hardware UUID" | awk -F ": " '{print $2}' | xargs)"
 
@@ -70,7 +86,7 @@ if [[ $(tail -n 1 "$logFile") = *"Remediation complete" ]]; then
 	echo "Append to existing logFile"
  	echo $(date -u) "Beginning Audit" >> "$logFile"; else
  	echo "Create new logFile"
- 	echo $(date -u) "Beginning Audit" > "$logFile"	
+ 	echo $(date -u) "Beginning Audit" > "$logFile"
 fi
 
 if [[ ! -e $plistlocation ]]; then
@@ -115,7 +131,7 @@ if [ "$Audit1_2" = "1" ]; then
 			defaults write "$plistlocation" OrgScore1_2 -bool false; else
 			echo "* 1.2 Enable Auto Update" >> "$auditfilelocation"
 			echo $(date -u) "1.2 fix" | tee -a "$logFile"
-		fi	
+		fi
 	fi
 fi
 
@@ -135,7 +151,7 @@ if [ "$Audit1_3" = "1" ]; then
 	fi
 fi
 
-# 1.4 Enable system data files and security update installs 
+# 1.4 Enable system data files and security update installs
 # Configuration Profile - Custom payload > com.apple.SoftwareUpdate.plist > ConfigDataInstall=true, CriticalUpdateInstall=true
 # Verify organizational score
 Audit1_4="$(defaults read "$plistlocation" OrgScore1_4)"
@@ -156,13 +172,21 @@ if [ "$Audit1_4" = "1" ]; then
 	fi
 fi
 
-# 1.5 Enable OS X update installs 
+# 1.5 Enable OS X update installs
 # Does not work as a Configuration Profile - Custom payload > com.apple.commerce
+# For 10.14+, add AutomaticallyInstallMacOSUpdates to the custom SoftwareUpdate Payload in 1.4
 # Verify organizational score
 Audit1_5="$(defaults read "$plistlocation" OrgScore1_5)"
 # If organizational score is 1 or true, check status of client
 if [ "$Audit1_5" = "1" ]; then
-	updateRestart="$(defaults read /Library/Preferences/com.apple.commerce AutoUpdateRestartRequired)"
+# High Sierra and Earlier OS Update Check
+    if [ $(sw_vers -productVersion | awk -F '.' '{print $2}') -le 13 ]; then
+updateRestart="$(defaults read /Library/Preferences/com.apple.commerce AutoUpdateRestartRequired)"
+else
+updateRestart="$(defaults read /Library/Preferences/com.apple.SoftwareUpdate AutomaticallyInstallMacOSUpdates)"
+fi
+
+
 	# If client fails, then note category in audit file
 	if [ "$updateRestart" = "1" ]; then
 		echo $(date -u) "1.5 passed" | tee -a "$logFile"
@@ -224,14 +248,16 @@ fi
 
 # 2.2.2 Ensure time set is within appropriate limits
 # Not audited - only enforced if identified as priority
+# High Sierra+ not impacted by this potential vulnerability
 # Verify organizational score
 Audit2_2_2="$(defaults read "$plistlocation" OrgScore2_2_2)"
 # If organizational score is 1 or true, check status of client
 # if [ "$Audit2_2_2" = "1" ]; then
-# sync time 
+# sync time
 # fi
 
 # 2.2.3 Restrict NTP server to loopback interface
+# High Sierra+ not impacted by this potential vulnerability
 # Verify organizational score
 Audit2_2_3="$(defaults read "$plistlocation" OrgScore2_2_3)"
 # If organizational score is 1 or true, check status of client
@@ -246,7 +272,7 @@ if [ "$Audit2_2_3" = "1" ]; then
 	fi
 fi
 
-# 2.3.1 Set an inactivity interval of 20 minutes or less for the screen saver 
+# 2.3.1 Set an inactivity interval of 20 minutes or less for the screen saver
 # Configuration Profile - LoginWindow payload > Options > Start screen saver after: 20 Minutes of Inactivity
 # Verify organizational score
 Audit2_3_1="$(defaults read "$plistlocation" OrgScore2_3_1)"
@@ -267,7 +293,7 @@ if [ "$Audit2_3_1" = "1" ]; then
 	fi
 fi
 
-# 2.3.2 Secure screen saver corners 
+# 2.3.2 Secure screen saver corners
 # Configuration Profile - Custom payload > com.apple.dock > wvous-tl-corner=0, wvous-br-corner=5, wvous-bl-corner=0, wvous-tr-corner=0
 # Verify organizational score
 Audit2_3_2="$(defaults read "$plistlocation" OrgScore2_3_2)"
@@ -291,7 +317,7 @@ if [ "$Audit2_3_2" = "1" ]; then
 	fi
 fi
 
-# 2.3.4 Set a screen corner to Start Screen Saver 
+# 2.3.4 Set a screen corner to Start Screen Saver
 # Configuration Profile - Custom payload > com.apple.dock > wvous-tl-corner=0, wvous-br-corner=5, wvous-bl-corner=0, wvous-tr-corner=0
 # Verify organizational score
 Audit2_3_4="$(defaults read "$plistlocation" OrgScore2_3_4)"
@@ -315,7 +341,7 @@ if [ "$Audit2_3_4" = "1" ]; then
 	fi
 fi
 
-# 2.4.1 Disable Remote Apple Events 
+# 2.4.1 Disable Remote Apple Events
 # Verify organizational score
 Audit2_4_1="$(defaults read "$plistlocation" OrgScore2_4_1)"
 # If organizational score is 1 or true, check status of client
@@ -330,7 +356,7 @@ if [ "$Audit2_4_1" = "1" ]; then
 	fi
 fi
 
-# 2.4.2 Disable Internet Sharing 
+# 2.4.2 Disable Internet Sharing
 # Verify organizational score
 Audit2_4_2="$(defaults read "$plistlocation" OrgScore2_4_2)"
 # If organizational score is 1 or true, check status of client
@@ -351,7 +377,7 @@ if [ "$Audit2_4_2" = "1" ]; then
 	fi
 fi
 
-# 2.4.3 Disable Screen Sharing 
+# 2.4.3 Disable Screen Sharing
 # Verify organizational score
 Audit2_4_3="$(defaults read "$plistlocation" OrgScore2_4_3)"
 # If organizational score is 1 or true, check status of client
@@ -366,7 +392,7 @@ if [ "$Audit2_4_3" = "1" ]; then
 	fi
 fi
 
-# 2.4.4 Disable Printer Sharing 
+# 2.4.4 Disable Printer Sharing
 # Verify organizational score
 Audit2_4_4="$(defaults read "$plistlocation" OrgScore2_4_4)"
 # If organizational score is 1 or true, check status of client
@@ -381,7 +407,7 @@ if [ "$Audit2_4_4" = "1" ]; then
 	fi
 fi
 
-# 2.4.5 Disable Remote Login 
+# 2.4.5 Disable Remote Login
 # Verify organizational score
 Audit2_4_5="$(defaults read "$plistlocation" OrgScore2_4_5)"
 # If organizational score is 1 or true, check status of client
@@ -396,7 +422,7 @@ if [ "$Audit2_4_5" = "1" ]; then
 	fi
 fi
 
-# 2.4.6 Disable DVD or CD Sharing 
+# 2.4.6 Disable DVD or CD Sharing
 # Verify organizational score
 Audit2_4_6="$(defaults read "$plistlocation" OrgScore2_4_6)"
 # If organizational score is 1 or true, check status of client
@@ -477,7 +503,7 @@ if [ "$Audit2_5_1" = "1" ]; then
 		fi
 fi
 
-# 2.5.2 Disable sleeping the computer when connected to power 
+# 2.5.2 Disable sleeping the computer when connected to power
 # Verify organizational score
 Audit2_5_2="$(defaults read "$plistlocation" OrgScore2_5_2)"
 # If organizational score is 1 or true, check status of client
@@ -497,7 +523,7 @@ if [ "$Audit2_5_2" = "1" ]; then
 		fi
 fi
 
-# 2.6.1 Enable FileVault 
+# 2.6.1 Enable FileVault
 # Verify organizational score
 Audit2_6_1="$(defaults read "$plistlocation" OrgScore2_6_1)"
 # If organizational score is 1 or true, check status of client
@@ -508,11 +534,11 @@ if [ "$Audit2_6_1" = "1" ]; then
 		echo "* 2.6.1 Enable FileVault" >> "$auditfilelocation"
 		echo $(date -u) "2.6.1 fix" | tee -a "$logFile"; else
 		echo $(date -u) "2.6.1 passed" | tee -a "$logFile"
-		defaults write "$plistlocation" OrgScore2_6_1 -bool false	
+		defaults write "$plistlocation" OrgScore2_6_1 -bool false
 	fi
 fi
 
-# 2.6.2 Enable Gatekeeper 
+# 2.6.2 Enable Gatekeeper
 # Configuration Profile - Security and Privacy payload > General > Gatekeeper > Mac App Store and identified developers (selected)
 # Verify organizational score
 Audit2_6_2="$(defaults read "$plistlocation" OrgScore2_6_2)"
@@ -533,7 +559,7 @@ if [ "$Audit2_6_2" = "1" ]; then
 	fi
 fi
 
-# 2.6.3 Enable Firewall 
+# 2.6.3 Enable Firewall
 # Configuration Profile - Security and Privacy payload > Firewall > Enable Firewall (checked)
 # Verify organizational score
 Audit2_6_3="$(defaults read "$plistlocation" OrgScore2_6_3)"
@@ -554,7 +580,7 @@ if [ "$Audit2_6_3" = "1" ]; then
 	fi
 fi
 
-# 2.6.4 Enable Firewall Stealth Mode 
+# 2.6.4 Enable Firewall Stealth Mode
 # Configuration Profile - Security and Privacy payload > Firewall > Enable stealth mode (checked)
 # Verify organizational score
 Audit2_6_4="$(defaults read "$plistlocation" OrgScore2_6_4)"
@@ -802,7 +828,7 @@ if [ "$Audit2_7_1_12" = "1" ]; then
 	fi
 fi
 
-# 2.7.2 Disable iCloud keychain (Not Scored) - 
+# 2.7.2 Disable iCloud keychain (Not Scored) -
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Keychain (unchecked)
 # Verify organizational score
 Audit2_7_2="$(defaults read "$plistlocation" OrgScore2_7_2)"
@@ -896,7 +922,7 @@ if [ "$Audit2_9" = "1" ]; then
 	fi
 fi
 
-# 2.10 Enable Secure Keyboard Entry in terminal.app 
+# 2.10 Enable Secure Keyboard Entry in terminal.app
 # Configuration Profile - Custom payload > com.apple.Terminal > SecureKeyboardEntry=true
 # Verify organizational score
 Audit2_10="$(defaults read "$plistlocation" OrgScore2_10)"
@@ -917,7 +943,7 @@ if [ "$Audit2_10" = "1" ]; then
 	fi
 fi
 
-# 2.11 Java 6 is not the default Java runtime 
+# 2.11 Java 6 is not the default Java runtime
 # Verify organizational score
 Audit2_11="$(defaults read "$plistlocation" OrgScore2_11)"
 # If organizational score is 1 or true, check status of client
@@ -939,7 +965,7 @@ if [ "$Audit2_11" = "1" ]; then
 	fi
 fi
 
-# 3.1.1 Retain system.log for 90 or more days 
+# 3.1.1 Retain system.log for 90 or more days
 # Verify organizational score
 Audit3_1_1="$(defaults read "$plistlocation" OrgScore3_1_1)"
 # If organizational score is 1 or true, check status of client
@@ -954,7 +980,7 @@ if [ "$Audit3_1_1" = "1" ]; then
 	fi
 fi
 
-# 3.1.2 Retain appfirewall.log for 90 or more days 
+# 3.1.2 Retain appfirewall.log for 90 or more days
 # Verify organizational score
 Audit3_1_2="$(defaults read "$plistlocation" OrgScore3_1_2)"
 # If organizational score is 1 or true, check status of client
@@ -1014,7 +1040,7 @@ if [ "$Audit3_3" = "1" ]; then
 	fi
 fi
 
-# 3.5 Retain install.log for 365 or more days 
+# 3.5 Retain install.log for 365 or more days
 # Verify organizational score
 Audit3_5="$(defaults read "$plistlocation" OrgScore3_5)"
 # If organizational score is 1 or true, check status of client
@@ -1029,7 +1055,7 @@ if [ "$Audit3_5" = "1" ]; then
 	fi
 fi
 
-# 4.1 Disable Bonjour advertising service 
+# 4.1 Disable Bonjour advertising service
 # Configuration Profile - Custom payload > com.apple.mDNSResponder > NoMulticastAdvertisements=true
 # Verify organizational score
 Audit4_1="$(defaults read "$plistlocation" OrgScore4_1)"
@@ -1050,7 +1076,7 @@ if [ "$Audit4_1" = "1" ]; then
 	fi
 fi
 
-# 4.2 Enable "Show Wi-Fi status in menu bar" 
+# 4.2 Enable "Show Wi-Fi status in menu bar"
 # Verify organizational score
 Audit4_2="$(defaults read "$plistlocation" OrgScore4_2)"
 # If organizational score is 1 or true, check status of client
@@ -1065,7 +1091,7 @@ if [ "$Audit4_2" = "1" ]; then
 	fi
 fi
 
-# 4.4 Ensure http server is not running 
+# 4.4 Ensure http server is not running
 # Verify organizational score
 Audit4_4="$(defaults read "$plistlocation" OrgScore4_4)"
 # If organizational score is 1 or true, check status of client
@@ -1079,7 +1105,7 @@ if [ "$Audit4_4" = "1" ]; then
 	fi
 fi
 
-# 4.5 Ensure ftp server is not running 
+# 4.5 Ensure ftp server is not running
 # Verify organizational score
 Audit4_5="$(defaults read "$plistlocation" OrgScore4_5)"
 # If organizational score is 1 or true, check status of client
