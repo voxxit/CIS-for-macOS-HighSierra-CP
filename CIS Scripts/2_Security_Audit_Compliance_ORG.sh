@@ -595,6 +595,22 @@ if [ "$Audit2_6_5" = "1" ]; then
 	fi
 fi
 
+# 2.6.6 Enable Location Services (Not Scored)
+# Verify organizational score
+Audit2_6_6="$(defaults read "$plistlocation" OrgScore2_6_6)"
+# If organizational score is 1 or true, check status of client
+if [ "$Audit2_6_6" = "1" ]; then
+    locationServicesStatus="$(/usr/bin/defaults read /var/db/locationd/Library/Preferences/ByHost/com.apple.locationd.plist LocationServicesEnabled)"
+    # if client fails, then note category in audit fike
+    if [[ "$locationServicesStatus" = "1" ]]; then
+        echo $(date -u) "2.6.6 passed" | tee -a "$logFile"
+        defaults write "$plistlocation" OrgScore2_6_6 -bool false; else
+        echo "* 2.6.6 Review Location Services Configuration" >> "$auditfilelocation"
+        echo $(date -u) "2.6.6 fix" | tee -a "$logFile"
+    fi
+fi
+
+
 # 2.7.1 iCloud configuration (Check for iCloud accounts) (Not Scored)
 # Verify organizational score
 Audit2_7_1="$(defaults read "$plistlocation" OrgScore2_7_1)"

@@ -46,7 +46,7 @@ logFile="/Library/Application Support/SecurityScoring/remediation.log"
 # Append to existing logFile
 echo $(date -u) "Beginning remediation" >> "$logFile"
 # Create new logFile
-# echo $(date -u) "Beginning remediation" > "$logFile"	
+# echo $(date -u) "Beginning remediation" > "$logFile"
 
 if [[ ! -e $plistlocation ]]; then
 	echo "No scoring file present"
@@ -84,7 +84,7 @@ if [ "$Audit1_3" = "1" ]; then
 	echo $(date -u) "1.3 remediated" | tee -a "$logFile"
 fi
 
-# 1.4 Enable system data files and security update installs 
+# 1.4 Enable system data files and security update installs
 # Verify organizational score
 Audit1_4="$(defaults read "$plistlocation" OrgScore1_4)"
 # If organizational score is 1 or true, check status of client
@@ -95,7 +95,7 @@ if [ "$Audit1_4" = "1" ]; then
 	echo $(date -u) "1.4 remediated" | tee -a "$logFile"
 fi
 
-# 1.5 Enable OS X update installs 
+# 1.5 Enable OS X update installs
 # Verify organizational score
 Audit1_5="$(defaults read "$plistlocation" OrgScore1_5)"
 # If organizational score is 1 or true, check status of client
@@ -165,7 +165,7 @@ if [ "$Audit2_2_3" = "1" ]; then
 	echo $(date -u) "2.2.3 remediated" | tee -a "$logFile"
 fi
 
-# 2.3.1 Set an inactivity interval of 20 minutes or less for the screen saver 
+# 2.3.1 Set an inactivity interval of 20 minutes or less for the screen saver
 # Verify organizational score
 Audit2_3_1="$(defaults read "$plistlocation" OrgScore2_3_1)"
 # If organizational score is 1 or true, check status of client
@@ -175,7 +175,7 @@ if [ "$Audit2_3_1" = "1" ]; then
 	echo $(date -u) "2.3.1 remediated" | tee -a "$logFile"
 fi
 
-# 2.3.2 Secure screen saver corners 
+# 2.3.2 Secure screen saver corners
 # Verify organizational score
 Audit2_3_2="$(defaults read "$plistlocation" OrgScore2_3_2)"
 # If organizational score is 1 or true, check status of client
@@ -211,7 +211,7 @@ if [ "$Audit2_3_2" = "1" ]; then
 	fi
 fi
 
-# 2.3.4 Set a screen corner to Start Screen Saver 
+# 2.3.4 Set a screen corner to Start Screen Saver
 # Verify organizational score
 Audit2_3_4="$(defaults read "$plistlocation" OrgScore2_3_4)"
 # If organizational score is 1 or true, check status of client
@@ -221,7 +221,7 @@ if [ "$Audit2_3_4" = "1" ]; then
 		echo $(date -u) "2.3.4 remediated" | tee -a "$logFile"
 fi
 
-# 2.4.1 Disable Remote Apple Events 
+# 2.4.1 Disable Remote Apple Events
 # Verify organizational score
 Audit2_4_1="$(defaults read "$plistlocation" OrgScore2_4_1)"
 # If organizational score is 1 or true, check status of client
@@ -231,7 +231,7 @@ if [ "$Audit2_4_1" = "1" ]; then
 		echo $(date -u) "2.4.1 remediated" | tee -a "$logFile"
 fi
 
-# 2.4.2 Disable Internet Sharing 
+# 2.4.2 Disable Internet Sharing
 # Verify organizational score
 Audit2_4_2="$(defaults read "$plistlocation" OrgScore2_4_2)"
 # If organizational score is 1 or true, check status of client
@@ -246,7 +246,7 @@ if [ "$Audit2_4_2" = "1" ]; then
 	echo $(date -u) "2.4.2 enforced" | tee -a "$logFile"
 fi
 
-# 2.4.3 Disable Screen Sharing 
+# 2.4.3 Disable Screen Sharing
 # Verify organizational score
 Audit2_4_3="$(defaults read "$plistlocation" OrgScore2_4_3)"
 # If organizational score is 1 or true, check status of client
@@ -257,7 +257,7 @@ if [ "$Audit2_4_3" = "1" ]; then
 	echo $(date -u) "2.4.3 remediated" | tee -a "$logFile"
 fi
 
-# 2.4.4 Disable Printer Sharing 
+# 2.4.4 Disable Printer Sharing
 # Verify organizational score
 Audit2_4_4="$(defaults read "$plistlocation" OrgScore2_4_4)"
 # If organizational score is 1 or true, check status of client
@@ -270,7 +270,7 @@ if [ "$Audit2_4_4" = "1" ]; then
 	echo $(date -u) "2.4.4 remediated" | tee -a "$logFile"
 fi
 
-# 2.4.5 Disable Remote Login 
+# 2.4.5 Disable Remote Login
 # Verify organizational score
 Audit2_4_5="$(defaults read "$plistlocation" OrgScore2_4_5)"
 # If organizational score is 1 or true, check status of client
@@ -280,7 +280,7 @@ if [ "$Audit2_4_5" = "1" ]; then
 	echo $(date -u) "2.4.5 remediated" | tee -a "$logFile"
 fi
 
-# 2.4.6 Disable DVD or CD Sharing 
+# 2.4.6 Disable DVD or CD Sharing
 # Verify organizational score
 Audit2_4_6="$(defaults read "$plistlocation" OrgScore2_4_6)"
 # If organizational score is 1 or true, check status of client
@@ -333,7 +333,7 @@ if [ "$Audit2_5_1" = "1" ]; then
 	echo $(date -u) "2.5.1 remediated" | tee -a "$logFile"
 fi
 
-# 2.5.2 Disable sleeping the computer when connected to power 
+# 2.5.2 Disable sleeping the computer when connected to power
 # Verify organizational score
 Audit2_5_2="$(defaults read "$plistlocation" OrgScore2_5_2)"
 # If organizational score is 1 or true, check status of client
@@ -344,7 +344,7 @@ if [ "$Audit2_5_2" = "1" ]; then
 	echo $(date -u) "2.5.2 remediated" | tee -a "$logFile"
 fi
 
-# 2.6.2 Enable Gatekeeper 
+# 2.6.2 Enable Gatekeeper
 # Verify organizational score
 Audit2_6_2="$(defaults read "$plistlocation" OrgScore2_6_2)"
 # If organizational score is 1 or true, check status of client
@@ -354,7 +354,7 @@ if [ "$Audit2_6_2" = "1" ]; then
 	echo $(date -u) "2.6.2 remediated" | tee -a "$logFile"
 fi
 
-# 2.6.3 Enable Firewall 
+# 2.6.3 Enable Firewall
 # Verify organizational score
 Audit2_6_3="$(defaults read "$plistlocation" OrgScore2_6_3)"
 # If organizational score is 1 or true, check status of client
@@ -364,7 +364,7 @@ if [ "$Audit2_6_3" = "1" ]; then
 	echo $(date -u) "2.6.3 remediated" | tee -a "$logFile"
 fi
 
-# 2.6.4 Enable Firewall Stealth Mode 
+# 2.6.4 Enable Firewall Stealth Mode
 # Verify organizational score
 Audit2_6_4="$(defaults read "$plistlocation" OrgScore2_6_4)"
 # If organizational score is 1 or true, check status of client
@@ -381,6 +381,17 @@ Audit2_6_5="$(defaults read "$plistlocation" OrgScore2_6_5)"
 # If client fails, then remediate
 if [ "$Audit2_6_5" = "1" ]; then
 	echo $(date -u) "2.6.5 not remediated" | tee -a "$logFile"
+fi
+
+# 2.6.6 Review Location Services State
+# Verify organizational score
+Audit2_6_6="$(defaults read "$plistlocation" OrgScore2_6_6)"
+# If organizational score is 1 or true, check status of client
+# If client fails, then remediate
+if [ "$Audit2_6_6" = "1" ]; then
+    /usr/bin/defaults write /var/db/locationd/Library/Preferences/ByHost/com.apple.locationd.plist LocationServicesEnabled -int 1
+    /usr/bin/defaults write /Library/Preferences/com.apple.locationmenu.plist ShowSystemServices -bool true
+	echo $(date -u) "2.6.6 remediated" | tee -a "$logFile"
 fi
 
 # 2.8.1 Time Machine Auto-Backup
@@ -403,7 +414,7 @@ if [ "$Audit2_9" = "1" ]; then
 	echo $(date -u) "2.9 remediated" | tee -a "$logFile"
 fi
 
-# 2.10 Enable Secure Keyboard Entry in terminal.app 
+# 2.10 Enable Secure Keyboard Entry in terminal.app
 # Verify organizational score
 Audit2_10="$(defaults read "$plistlocation" OrgScore2_10)"
 # If organizational score is 1 or true, check status of client
@@ -413,7 +424,7 @@ if [ "$Audit2_10" = "1" ]; then
 	echo $(date -u) "2.10 remediated" | tee -a "$logFile"
 fi
 
-# 3.1.1 Retain system.log for 90 or more days 
+# 3.1.1 Retain system.log for 90 or more days
 # Verify organizational score
 Audit3_1_1="$(defaults read "$plistlocation" OrgScore3_1_1)"
 # If organizational score is 1 or true, check status of client
@@ -436,7 +447,7 @@ if [ "$Audit3_1_1" = "1" ]; then
 	fi
 fi
 
-# 3.1.2 Retain appfirewall.log for 90 or more days 
+# 3.1.2 Retain appfirewall.log for 90 or more days
 # Verify organizational score
 Audit3_1_2="$(defaults read "$plistlocation" OrgScore3_1_2)"
 # If organizational score is 1 or true, check status of client
@@ -505,7 +516,7 @@ if [ "$Audit3_3" = "1" ]; then
 	echo $(date -u) "3.3 remediated" | tee -a "$logFile"
 fi
 
-# 3.5 Retain install.log for 365 or more days 
+# 3.5 Retain install.log for 365 or more days
 # Verify organizational score
 Audit3_5="$(defaults read "$plistlocation" OrgScore3_5)"
 # If organizational score is 1 or true, check status of client
@@ -527,7 +538,7 @@ if [ "$Audit3_5" = "1" ]; then
 	fi
 fi
 
-# 4.1 Disable Bonjour advertising service 
+# 4.1 Disable Bonjour advertising service
 # Verify organizational score
 Audit4_1="$(defaults read "$plistlocation" OrgScore4_1)"
 # If organizational score is 1 or true, check status of client
@@ -537,7 +548,7 @@ if [ "$Audit4_1" = "1" ]; then
 	echo $(date -u) "4.1 remediated" | tee -a "$logFile"
 fi
 
-# 4.2 Enable "Show Wi-Fi status in menu bar" 
+# 4.2 Enable "Show Wi-Fi status in menu bar"
 # Verify organizational score
 Audit4_2="$(defaults read "$plistlocation" OrgScore4_2)"
 # If organizational score is 1 or true, check status of client
@@ -547,7 +558,7 @@ if [ "$Audit4_2" = "1" ]; then
 	echo $(date -u) "4.2 remediated" | tee -a "$logFile"
 fi
 
-# 4.4 Ensure http server is not running 
+# 4.4 Ensure http server is not running
 # Verify organizational score
 Audit4_4="$(defaults read "$plistlocation" OrgScore4_4)"
 # If organizational score is 1 or true, check status of client
@@ -558,7 +569,7 @@ if [ "$Audit4_4" = "1" ]; then
 	echo $(date -u) "4.4 remediated" | tee -a "$logFile"
 fi
 
-# 4.5 Ensure ftp server is not running 
+# 4.5 Ensure ftp server is not running
 # Verify organizational score
 Audit4_5="$(defaults read "$plistlocation" OrgScore4_5)"
 # If organizational score is 1 or true, check status of client
@@ -752,7 +763,7 @@ Audit5_13="$(defaults read "$plistlocation" OrgScore5_13)"
 if [ "$Audit5_13" = "1" ]; then
 	PolicyBannerText="CIS mandated Login Window banner"
 	/bin/echo "$PolicyBannerText" > "/Library/Security/PolicyBanner.txt"
-	/bin/chmod 755 "/Library/Security/PolicyBanner."* 
+	/bin/chmod 755 "/Library/Security/PolicyBanner."*
 	echo $(date -u) "5.13 remediated" | tee -a "$logFile"
 fi
 
