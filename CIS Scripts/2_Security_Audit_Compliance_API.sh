@@ -39,21 +39,6 @@
 # Non-compliant items are logged to /Library/Application Support/SecurityScoring/org_audit
 # Variables
 
-# EXEMPTIONS
-# Add a variation of the below snippet to check for any exemptions created for the machine
-# 2.1.1 Turn off Bluetooth, if no paired devices exist
-# Check Exemption Status
-# Exemption2_1_1="$(defaults read "$exemptionlocation" Exemption2_1_1)"
-# If exemption is set to true, exit any additional checks on this compliance item
-# if [ "$Exemption2_1_1" = "true" ]; then
-#    echo "Computer is exempt from this CIS Compliance Attribute, skipping"
-#    exit 0
-# else
-# Regular Compliance Code Below
-# ...
-# fi
-
-
 JamfProURL=""  # URL for your Jamf Pro server, including port, if necessary
 
 # Using the GenerateEncryptedSring function, replace ENTER_SALT_HERE and ENTER_PASS_PHRASE_HERE
@@ -627,7 +612,7 @@ if [ "$Audit2_6_6" = "1" ]; then
     if [[ "$locationServicesStatus" = "1" ]]; then
         echo $(date -u) "2.6.6 passed" | tee -a "$logFile"
         defaults write "$plistlocation" OrgScore2_6_6 -bool false; else
-        echo "* 2.6.6 Review Location Services Configuration" >> "$auditfilelocation"
+        echo "* 2.6.6 Enable Location Services Configuration" >> "$auditfilelocation"
         echo $(date -u) "2.6.6 fix" | tee -a "$logFile"
     fi
 fi
