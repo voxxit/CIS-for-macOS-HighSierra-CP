@@ -61,7 +61,11 @@ Audit1_1="$(defaults read "$plistlocation" OrgScore1_1)"
 if [ "$Audit1_1" = "1" ]; then
 	echo $(date -u) "1.1 remediated" | tee -a "$logFile"
 	# NOTE: INSTALLS ALL RECOMMENDED SOFTWARE UPDATES FROM CLIENT'S CONFIGURED SUS SERVER
-	softwareupdate -i -r
+	# softwareupdate -i -r
+	# The recommended approach is to create an appropriate policy which gently ramps updates, notifies users of their pending installation
+	# and gives the user a small amount of wiggle room to schedule the likely reboot
+	# Jamf example below
+	# /usr/local/bin/jamf policy -event CustomSoftwareUpdateTrigger
 fi
 
 # 1.2 Enable Auto Update
@@ -102,6 +106,7 @@ Audit1_5="$(defaults read "$plistlocation" OrgScore1_5)"
 # If client fails, then remediate
 if [ "$Audit1_5" = "1" ]; then
 	defaults write /Library/Preferences/com.apple.commerce AutoUpdateRestartRequired -bool true
+	defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticallyInstallMacOSUpdates -bool true
 	echo $(date -u) "1.5 remediated" | tee -a "$logFile"
 fi
 
@@ -116,7 +121,7 @@ if [ "$Audit2_1_1" = "1" ]; then
 	if [ "$connectable" = "Yes" ]; then
 		echo $(date -u) "2.1.1 passed" | tee -a "$logFile"; else
 		defaults write /Library/Preferences/com.apple.Bluetooth ControllerPowerState -bool false
-		killall -HUP blued
+		killall -HUP bluetoothd
 		echo $(date -u) "2.1.1 remediated" | tee -a "$logFile"
 	fi
 fi
