@@ -60,7 +60,6 @@ CISListEA=""   #ID number for the extension attribute 2.5_Audit_List
 
 plistlocation="/Library/Application Support/SecurityScoring/org_security_score.plist"
 auditfilelocation="/Library/Application Support/SecurityScoring/org_audit"
-exemptionlocation="/Library/Application Support/SecurityScoring/org_exemptions.plist"
 currentUser="$(python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')"
 hardwareUUID="$(/usr/sbin/system_profiler SPHardwareDataType | grep "Hardware UUID" | awk -F ": " '{print $2}' | xargs)"
 
@@ -1564,7 +1563,6 @@ echo $(date -u) "Updating extension attributes" | tee -a "$logFile"
 CISCount=$(cat "$auditfilelocation" | grep "*" | wc -l | tr -d '[:space:]')
 CISList=$(cat "$auditfilelocation")
 # Update Count
-
 
 curl -sS -k -i -u $username:$password -X PUT -H "Content-Type: text/xml" -d "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><computer><extension_attributes><extension_attribute><id>$CISCountEA</id><value>$CISCount</value></extension_attribute></extension_attributes></computer>" $JamfProURL/JSSResource/computers/udid/$hardwareUUID > /dev/null
 

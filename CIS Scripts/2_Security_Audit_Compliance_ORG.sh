@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 ####################################################################################################
 #
 # Copyright (c) 2017, Jamf, LLC.  All rights reserved.
@@ -38,24 +40,10 @@
 # For "true" items, runs query for current computer/user compliance.
 # Non-compliant items are logged to /Library/Application Support/SecurityScoring/org_audit
 
-# EXEMPTIONS
-# Add a variation of the below snippet to check for any exemptions created for the machine
-# 2.1.1 Turn off Bluetooth, if no paired devices exist
-# Check Exemption Status
-# Exemption2_1_1="$(defaults read "$exemptionlocation" Exemption2_1_1)"
-# If exemption is set to true, exit any additional checks on this compliance item
-# if [ "$Exemption2_1_1" = "true" ]; then
-#    echo "Computer is exempt from this CIS Compliance Attribute, skipping"
-#    exit 0
-# else
-# Regular Compliance Code Below
-# ...
-# fi
 
 
 plistlocation="/Library/Application Support/SecurityScoring/org_security_score.plist"
 auditfilelocation="/Library/Application Support/SecurityScoring/org_audit"
-exemptionlocation="/Library/Application Support/SecurityScoring/org_exemptions.plist"
 currentUser="$(python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')"
 hardwareUUID="$(/usr/sbin/system_profiler SPHardwareDataType | grep "Hardware UUID" | awk -F ": " '{print $2}' | xargs)"
 
@@ -236,6 +224,7 @@ Audit2_2_2="$(defaults read "$plistlocation" OrgScore2_2_2)"
 # fi
 
 # 2.2.3 Restrict NTP server to loopback interface
+# I doubt that this is needed on OSes where timed has replaced ntp
 # Verify organizational score
 Audit2_2_3="$(defaults read "$plistlocation" OrgScore2_2_3)"
 # If organizational score is 1 or true, check status of client
@@ -252,6 +241,7 @@ fi
 
 # 2.3.1 Set an inactivity interval of 20 minutes or less for the screen saver
 # Configuration Profile - LoginWindow payload > Options > Start screen saver after: 20 Minutes of Inactivity
+# Slight preference for setting this via script to allow for in session changes by the end user
 # Verify organizational score
 Audit2_3_1="$(defaults read "$plistlocation" OrgScore2_3_1)"
 # If organizational score is 1 or true, check status of client

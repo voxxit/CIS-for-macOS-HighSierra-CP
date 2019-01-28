@@ -55,20 +55,24 @@ plistlocation="$dir/org_security_score.plist"
 # 1.1 Verify all Apple provided software is current
 # Best managed via Jamf
 # OrgScore1_1="true"
-OrgScore1_1="false"
+OrgScore1_1="true"
+# OrgScore1_1="false"
 
 # 1.2 Enable Auto Update
 # Configuration Profile - Custom payload > com.apple.SoftwareUpdate.plist > AutomaticCheckEnabled=true, AutomaticDownload=true
+# or setting via defaults
 OrgScore1_2="true"
 # OrgScore1_2="false"
 
 # 1.3 Enable app update installs
 # Does not work as a Configuration Profile - Custom payload > com.apple.commerce
+# or setting via defaults
 OrgScore1_3="true"
 # OrgScore1_3="false"
 
 # 1.4 Enable system data files and security update installs
-# Configuration Profile - Custom payload > com.apple.SoftwareUpdate.plist > ConfigDataInstall=true, CriticalUpdateInstall=true
+# Configuration Profile - Custom payload com.apple.SoftwareUpdate.plist > ConfigDataInstall=true, CriticalUpdateInstall=true
+# or setting via defaults
 OrgScore1_4="true"
 # OrgScore1_4="false"
 
@@ -104,6 +108,7 @@ OrgScore2_2_3="true"
 
 # 2.3.1 Set an inactivity interval of 20 minutes or less for the screen saver
 # Configuration Profile - LoginWindow payload > Options > Start screen saver after: 20 Minutes of Inactivity
+# or done via defaults. Using defaults would allow the user to make in session changes
 OrgScore2_3_1="true"
 # OrgScore2_3_1="false"
 
@@ -164,8 +169,8 @@ OrgScore2_5_1="true"
 # OrgScore2_5_1="false"
 
 # 2.5.2 Disable sleeping the computer when connected to power
-OrgScore2_5_2="true"
-# OrgScore2_5_2="false"
+# OrgScore2_5_2="true"
+OrgScore2_5_2="false"
 
 # 2.6.1 Enable FileVault
 OrgScore2_6_1="true"
@@ -204,83 +209,83 @@ OrgScore2_7_1="true"
 
 # 2.7.1.01 Disable Apple ID setup during login (Not Scored)
 # Configuration Profile - LoginWindow payload > Options >  Disable Apple ID setup during login (checked)
-OrgScore2_7_1_01="true"
-# OrgScore2_7_1_01="false"
+# OrgScore2_7_1_01="true"
+OrgScore2_7_1_01="false"
 
 # 2.7.1.02 Disable the iCloud system preference pane (Not Scored)
 # Configuration Profile - Restrictions payload > Preferences > disable selected items > iCloud
-OrgScore2_7_1_02="true"
-# OrgScore2_7_1_02="false"
+# OrgScore2_7_1_02="true"
+OrgScore2_7_1_02="false"
 
 # 2.7.1.03 Disable the use of iCloud password for local accounts (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow use of iCloud password for local accounts (unchecked)
-OrgScore2_7_1_03="true"
-# OrgScore2_7_1_03="false"
+# OrgScore2_7_1_03="true"
+OrgScore2_7_1_03="false"
 
 # 2.7.1.04 Disable iCloud Back to My Mac (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Back to My Mac (unchecked)
-OrgScore2_7_1_04="true"
-# OrgScore2_7_1_04="false"
+# OrgScore2_7_1_04="true"
+OrgScore2_7_1_04="false"
 
 # 2.7.1.05 Disable iCloud Find My Mac (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Find My Mac (unchecked)
-OrgScore2_7_1_05="true"
-# OrgScore2_7_1_05="false"
+# OrgScore2_7_1_05="true"
+OrgScore2_7_1_05="false"
 
 # 2.7.1.06 Disable iCloud Bookmarks (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Bookmarks (unchecked)
-OrgScore2_7_1_06="true"
-# OrgScore2_7_1_06="false"
+# OrgScore2_7_1_06="true"
+OrgScore2_7_1_06="false"
 
 # 2.7.1.07 Disable iCloud Mail (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Mail (unchecked)
-OrgScore2_7_1_07="true"
-# OrgScore2_7_1_07="false"
+# OrgScore2_7_1_07="true"
+OrgScore2_7_1_07="false"
 
 # 2.7.1.08 Disable iCloud Calendar (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Calendar (unchecked)
-OrgScore2_7_1_08="true"
-# OrgScore2_7_1_08="false"
+# OrgScore2_7_1_08="true"
+OrgScore2_7_1_08="false"
 
 # 2.7.1.09 Disable iCloud Reminders (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Reminders (unchecked)
-OrgScore2_7_1_09="true"
-# OrgScore2_7_1_09="false"
+# OrgScore2_7_1_09="true"
+OrgScore2_7_1_09="false"
 
 # 2.7.1.10 Disable iCloud Contacts (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Contacts (unchecked)
-OrgScore2_7_1_10="true"
-# OrgScore2_7_1_10="false"
+# OrgScore2_7_1_10="true"
+OrgScore2_7_1_10="false"
 
 # 2.7.1.11 Disable iCloud Notes (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Notes (unchecked)
-OrgScore2_7_1_11="true"
-# OrgScore2_7_1_11="false"
+# OrgScore2_7_1_11="true"
+OrgScore2_7_1_11="false"
 
 # 2.7.1.12 Disable Content Caching (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow Content Caching (unchecked)
-OrgScore2_7_1_12="true"
-# OrgScore2_7_1_12="false"
+# OrgScore2_7_1_12="true"
+OrgScore2_7_1_12="false"
 
 # 2.7.2 iCloud keychain (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Keychain (unchecked)
-OrgScore2_7_2="true"
-# OrgScore2_7_2="false"
+# OrgScore2_7_2="true"
+OrgScore2_7_2="false"
 
 # 2.7.3 iCloud Drive (Not Scored)
 # Configuration Profile - Restrictions payload > Functionality > Allow iCloud Drive (unchecked)
-OrgScore2_7_3="true"
-# OrgScore2_7_3="false"
+# OrgScore2_7_3="true"
+OrgScore2_7_3="false"
 
 # 2.7.4 iCloud Drive Document sync
 # Configuration Profile - Restrictions payload - > Functionality > Allow iCloud Desktop & Documents (unchecked)
-OrgScore2_7_4="true"
-# OrgScore2_7_4="false"
+# OrgScore2_7_4="true"
+OrgScore2_7_4="false"
 
 # 2.7.5 iCloud Drive Desktop sync
 # Configuration Profile - Restrictions payload - > Functionality > Allow iCloud Desktop & Documents (unchecked)
-OrgScore2_7_5="true"
-# OrgScore2_7_5="false"
+#OrgScore2_7_5="true"
+OrgScore2_7_5="false"
 
 # 2.8.1 Time Machine Auto-Backup
 # Time Machine is typically not used as an Enterprise backup solution
@@ -339,8 +344,8 @@ OrgScore3_5="true"
 
 # 4.1 Disable Bonjour advertising service
 # Configuration Profile - Custom payload > com.apple.mDNSResponder > NoMulticastAdvertisements=true
-OrgScore4_1="true"
-# OrgScore4_1="false"
+#OrgScore4_1="true"
+OrgScore4_1="false"
 
 # 4.2 Enable "Show Wi-Fi status in menu bar"
 OrgScore4_2="true"
@@ -369,8 +374,9 @@ OrgScore5_1_2="true"
 # OrgScore5_1_2="false"
 
 # 5.1.3 Check System folder for world writable files
-OrgScore5_1_3="true"
-# OrgScore5_1_3="false"
+# Not needed for any macOS which contains System Integrity Protection
+# OrgScore5_1_3="true"
+OrgScore5_1_3="false"
 
 # 5.1.4 Check Library folder for world writable files
 OrgScore5_1_4="true"
@@ -387,8 +393,8 @@ OrgScore5_1_4="true"
 ## 5.2.8 Password History
 
 # 5.3 Reduce the sudo timeout period
-OrgScore5_3="true"
-# OrgScore5_3="false"
+#OrgScore5_3="true"
+OrgScore5_3="false"
 
 # 5.4 Automatically lock the login keychain for inactivity
 # This is a very bad idea. It will confuse users.
@@ -430,13 +436,13 @@ OrgScore5_11="true"
 
 # 5.12 Create a custom message for the Login Screen
 # Configuration Profile - LoginWindow payload > Window > Banner (message)
-OrgScore5_12="true"
-# OrgScore5_12="false"
+# OrgScore5_12="true"
+OrgScore5_12="false"
 
 # 5.13 Create a Login window banner
 # Policy Banner https://support.apple.com/en-us/HT202277
-OrgScore5_13="true"
-# OrgScore5_13="false"
+# OrgScore5_13="true"
+OrgScore5_13="false"
 
 ## 5.14 Do not enter a password-related hint (Not Scored)
 ## Not needed if 6.1.2 Disable "Show password hints" is enforced.
@@ -471,8 +477,8 @@ OrgScore6_1_2="true"
 
 # 6.1.3 Disable guest account
 # Configuration Profile - LoginWindow payload > Options > Allow Guest User (unchecked)
-OrgScore6_1_3="true"
-# OrgScore6_1_3="false"
+# OrgScore6_1_3="true"
+OrgScore6_1_3="false"
 
 # 6.1.4 Disable "Allow guests to connect to shared folders"
 # Configuration Profile - 6.1.4 Disable Allow guests to connect to shared folders - Custom payload > com.apple.AppleFileServer guestAccess=false, com.apple.smb.server AllowGuestAccess=false
