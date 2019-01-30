@@ -98,7 +98,7 @@ NOTES:
 	The built-in syslog capability in OS X runs over UDP without encryption. Broadcasting log unencrypted over
 	the internet is not a good idea. While syslog may be acceptable on some internal trusted networks it is not a
 	solution for mobile devices that hop between networks.
-* Item "4.3 Create network specific locations (Not Scored)" is disabled by default.
+* Item "4.3 Create network specific locations (Not Scored)" is disabled b y default.
 * Item "5.4 Automatically lock the login keychain for inactivity" is disabled by default.
 * Item "5.5 Ensure login keychain is locked when the computer sleeps" is disabled by default.
 * Item "5.6 Enable OCSP and CRL certificate checking" is disabled by default.
