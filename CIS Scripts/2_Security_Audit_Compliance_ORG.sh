@@ -214,6 +214,7 @@ fi
 
 # 2.2.2 Ensure time set is within appropriate limits
 # Not audited - only enforced if identified as priority
+# No way to audit on 10.14 or higher currently
 # Verify organizational score
 Audit2_2_2="$(defaults read "$plistlocation" OrgScore2_2_2)"
 # If organizational score is 1 or true, check status of client
@@ -946,6 +947,23 @@ if [ "$Audit2_11" = "1" ]; then
 		defaults write "$plistlocation" OrgScore2_11 -bool false
 	fi
 fi
+
+# 2.13 Ensure EFI version is valid and being regularly checked (Pre T2 Mac hardware Only)
+# Verify organizational score
+Audit2_13="$(defaults read "$plistlocation" OrgScore2_13)"
+# If organizational score is 1 or true, check status of client
+if [ "$Audit2_13" = "1" ]; then
+  # Check to see if the Hardware is T2 generation
+  AppleT2Presence="$(/usr/libexec/PlistBuddy -c "print :0:_items:0:ibridge_model_name" /dev/stdin 2>/dev/null <<< "$(/usr/sbin/system_profiler -xml SPiBridgeDataType -nospawn)")"
+    if [[ "$AppleT2Presence" = "Apple T2 Security Chip" ]]; then
+      echo $(date -u) "2.13 passed" | tee -a "$logFile"
+    elif [[ "$(/usr/libexec/firmwarecheckers/eficheck/eficheck --integrity-check)" =! "No changes detected" ]]; then
+      echo $(date -u) "2.13 passed" | tee -a "$logFile"
+    else
+      echo $(date -u) "2.13 fix" | tee -a "$logFile"
+    fi
+fi
+
 
 # 3.1.1 Retain system.log for 90 or more days
 # Verify organizational score
